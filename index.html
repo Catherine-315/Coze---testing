@@ -3,115 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>「辦」識AI 系列 - 從零開始</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+    <title>「辦」識AI 系列 - 從零開始 | AI x Fashion</title>
+    <!-- 引入更有設計感的字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <!-- 保留 Coze SDK -->
     <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* --- Cyber Fashion 核心變量 --- */
+        :root {
+            --bg-color: #050505; /* 極致黑 */
+            --card-bg: rgba(20, 20, 20, 0.8); /* 半透明深灰 */
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --primary-neon: #00f2fe; /* 電子藍 */
+            --secondary-neon: #4facfe; /* 深度藍 */
+            --accent-neon: #ff0055; /* 時尚品紅 */
+            --cyber-font: 'Syncopate', sans-serif; /* 科技感標題 */
+            --body-font: 'Noto Sans TC', sans-serif;
+            --mono-font: 'Space Mono', monospace; /* 數據感字體 */
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* --- 基礎樣式重置 --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f7f5f0;
-            color: #4a4543;
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
+            /* 增加背景細節：微弱的網格 */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
+
+        /* --- 時尚卡片容器 --- */
         .card {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(74, 69, 67, 0.06);
-            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
+            padding: 60px 40px;
+            border-radius: 0px; /* 時尚極簡，不要圓角 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 900px; /* 加寬卡片，更有發布會感覺 */
             width: 100%;
-            text-align: center;
-            border: 1px solid #eae5df;
+            display: flex;
+            flex-direction: row; /* 左右佈局 */
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            transition: border-color 0.5s var(--ease);
+            overflow: hidden;
         }
+
+        /* 卡片霓虹邊框效果 */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--primary-neon), var(--accent-neon));
+        }
+
+        /* 響應式：手機端變回上下佈局 */
+        @media (max-width: 768px) {
+            .card {
+                flex-direction: column;
+                padding: 40px 20px;
+            }
+        }
+
+        /* --- 左側：媒體區域 (圖片 + 影片) --- */
+        .media-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* 圖片框樣式 - 時尚化 */
         .photo-frame {
             width: 100%;
-            height: 240px;
-            background-color: #f0ebe1;
-            border-radius: 8px;
-            margin-bottom: 24px;
+            height: 200px;
+            background-color: #111;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #e2dad0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
         }
+
         .photo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-        h1 {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 19px;
-            font-weight: 600;
-            color: #2c2725;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-        p {
-            font-size: 14px;
-            color: #7d736e;
-            line-height: 1.8;
-            margin-bottom: 24px;
-            font-weight: 300;
-        }
-        .status-badge {
-            display: inline-block;
-            background: #f0ede6;
-            color: #5c534e;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            margin-bottom: 20px;
+            filter: grayscale(100%); /* 時尚黑白效果 */
+            transition: filter 0.5s var(--ease);
         }
 
-        /* 🎬 新增：影片播放器（固定 200px × 400px） */
+        .card:hover .photo-frame img {
+            filter: grayscale(0%); /* 懸停時恢復彩色 */
+        }
+
+        /* 影片框樣式 - Cyber 化 */
         .video-wrapper {
-            width: 200px;
-            height: 400px;
-            margin: 0 auto; /* 居中對齊 */
-            border-radius: 12px;
+            width: 100%; /* 適應左側寬度 */
+            height: auto;
+            aspect-ratio: 1 / 1; /* 時尚的 1:1 比例 */
+            border-radius: 0px;
             overflow: hidden;
-            background-color: #2c2725;
-            border: 1px solid #e2dad0;
-            box-shadow: 0 4px 12px rgba(74, 69, 67, 0.1);
+            background-color: #000;
+            border: 1px solid var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); /* 霓虹光暈 */
+            position: relative;
+        }
+
+        /* 在影片上增加掃描線效果 */
+        .video-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
         }
 
         .video-wrapper video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 讓影片填滿 200x400 的容器 */
+            object-fit: cover;
             display: block;
+        }
+
+        /* --- 右側：文本區域 --- */
+        .text-section {
+            flex: 1.2;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: var(--cyber-font);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            text-transform: uppercase; /* 全大寫 */
+            background: linear-gradient(120deg, #fff 30%, var(--primary-neon), #fff 70%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% auto; }
+        }
+
+        /* 時尚排版的小標題 */
+        .subtitle {
+            font-family: var(--mono-font);
+            color: var(--accent-neon);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- 狀態標籤 - 數據感樣式 --- */
+        .status-badge {
+            font-family: var(--mono-font);
+            display: inline-block;
+            background: transparent;
+            color: var(--primary-neon);
+            padding: 10px 20px;
+            border: 1px solid var(--primary-neon);
+            border-radius: 0px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s var(--ease);
+        }
+
+        .status-badge::before {
+            content: '>';
+            margin-right: 8px;
+        }
+
+        /* 連接成功後的樣式 */
+        .status-badge.ready {
+            color: var(--bg-color);
+            background-color: var(--primary-neon);
+            box-shadow: 0 0 15px var(--primary-neon);
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- 直接使用 GitHub 官方的 Raw 連結，確保圖片絕對讀得到 -->
-        <div class="photo-frame">
-            <img src="https://github.com/Catherine-315/Coze---testing/blob/main/SDgroup.png?raw=true" alt="活動相片">
+        <!-- 左側媒體區 -->
+        <div class="media-section">
+            <div class="photo-frame">
+                <img src="https://github.com/Catherine-315/Coze---testing/blob/main/SDgroup.png?raw=true" alt="活動相片">
+            </div>
+
+            <div class="video-wrapper">
+                <video autoplay muted loop playsinline>
+                    <source src="https://github.com/Catherine-315/Coze---testing/raw/refs/heads/main/%E5%A4%9A%E5%90%88%E4%B8%80%20AI%20%E5%9C%98%E9%9A%8A.mp4" type="video/mp4">
+                    您的瀏覽器不支援影片播放。
+                </video>
+            </div>
         </div>
 
-        <h1>「辦」識AI 系列 - 從零開始：手把手帶你打造專屬 AI Chatbot</h1>
-        
-        <p>喝杯咖啡，慢下來感受科技。有任何關於活動的查詢或想法，歡迎隨時點擊右下角，與小幫手溫柔對話。</p>
-        
-        <div class="status-badge" id="status">正在連結心靈與 AI...</div>
-
-        <!-- 🎥 新增：200px x 400px 自動播放影片框 -->
-        <div class="video-wrapper">
-            <video autoplay muted loop playsinline>
-                <!-- 💡 請將下面的路徑/連結換成你的影片檔案路徑 (例如 ./demo.mp4) -->
-                <source src="https://github.com/Catherine-315/Coze---testing/raw/refs/heads/main/%E5%A4%9A%E5%90%88%E4%B8%80%20AI%20%E5%9C%98%E9%9A%8A.mp4" type="video/mp4">
-                您的瀏覽器不支援影片播放。
-            </video>
+        <!-- 右側文本區 -->
+        <div class="text-section">
+            <span class="subtitle">Caritas / AI Workshop v1.0</span>
+            <h1>「辦」識AI 系列<br>從零開始</h1>
+            
+            <p>喝杯咖啡，慢下來感受科技。<br>有任何關於活動的查詢或想法，歡迎隨時點擊右下角，與小幫手溫柔對話。</p>
+            
+            <div class="status-badge" id="status">initializing_connection...</div>
         </div>
     </div>
 
@@ -119,44 +254,54 @@
       async function initChat() {
         const statusEl = document.getElementById('status');
         try {
+          // 1. 從你的 Vercel API 獲取 JWT Token
           const res = await fetch('/api/token');
           const data = await res.json();
           
           if (!data.access_token) {
-            statusEl.innerText = "連線未如預期，請重新整理";
+            statusEl.innerText = "connection_error";
+            statusEl.style.borderColor = "var(--accent-neon)";
+            statusEl.style.color = "var(--accent-neon)";
             return;
           }
 
-          statusEl.innerText = "✨ 準備就緒，右下角隨時傾偈";
+          // 2. 更新狀態為 ready (應用新樣式)
+          statusEl.innerText = "system_ready";
+          statusEl.classList.add('ready');
 
+          // 3. 初始化 Coze Web SDK (使用 JWT 認證模式)
           new CozeWebSDK.WebChatClient({
             config: {
-              bot_id: '7662199682715090949',
-              isIframe: false
+              bot_id: '7662199682715090949', // 你的 Bot ID
+              isIframe: false // 懸浮窗模式
             },
             componentProps: {
-              title: '明愛社會工作服務（服務發展）小幫手',
+              title: '明愛社會工作服務小幫手',
             },
             auth: {
-              type: 'token',
-              token: data.access_token,
+              type: 'token', // 必須是 token
+              token: data.access_token, // JWT token
               onRefreshToken: async () => {
+                // Token 過期時自動刷新
                 const refreshRes = await fetch('/api/token');
                 const refreshData = await refreshRes.json();
                 return refreshData.access_token;
               }
             },
             userInfo: {
-              id: data.user_id,
+              id: data.user_id, // 來自 API 的 user_id
               nickName: "Catherine",
             }
           });
         } catch (err) {
           console.error("初始化聊天室失敗：", err);
-          statusEl.innerText = "出了一點小狀況";
+          statusEl.innerText = "critical_failure";
+          statusEl.style.borderColor = "var(--accent-neon)";
+          statusEl.style.color = "var(--accent-neon)";
         }
       }
 
+      // 執行初始化
       initChat();
     </script>
 </body>
