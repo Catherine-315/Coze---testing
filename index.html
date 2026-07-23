@@ -3,132 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>「辦」識AI 系列 - 從零開始</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+    <title>「辦」識AI 系列 - 從零開始：手把手帶你打造專屬 AI Chatbot</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f7f5f0;
-            color: #4a4543;
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
-        .card {
+
+        .container {
             background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(74, 69, 67, 0.06);
-            max-width: 520px;
+            max-width: 680px;
             width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
             text-align: center;
-            border: 1px solid #eae5df;
         }
-        .photo-frame {
+
+        .banner-img {
             width: 100%;
-            height: 240px;
-            background-color: #f0ebe1;
-            border-radius: 8px;
+            height: auto;
+            border-radius: 12px;
             margin-bottom: 24px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #e2dad0;
-        }
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
         }
+
         h1 {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 19px;
-            font-weight: 600;
-            color: #2c2725;
-            line-height: 1.6;
+            font-size: 1.6rem;
+            color: #1a1a1a;
             margin-bottom: 16px;
+            line-height: 1.4;
         }
-        p {
-            font-size: 14px;
-            color: #7d736e;
-            line-height: 1.8;
-            margin-bottom: 24px;
-            font-weight: 300;
+
+        p.description {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
-        .status-badge {
+
+        .status-text {
+            font-size: 0.95rem;
+            color: #2b8a3e;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            background-color: #ebfbee;
             display: inline-block;
-            background: #f0ede6;
-            color: #5c534e;
-            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 13px;
-            letter-spacing: 0.5px;
+        }
+
+        /* 🎬 新增：自動播放影片容器區域 */
+        .video-container {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: #000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <!-- 已經對應你 GitHub 根目錄的 SDgroup.png -->
-        <div class="photo-frame">
-            <img src="SDgroup.png" alt="活動相片">
+    <div class="container">
+        <!-- 活動主圖 -->
+        <div>
+            <img class="banner-img" alt="活動相片" src="https://github.com/Catherine-315/Coze-JWT-App/blob/main/SDgroup.png?raw=true">
         </div>
 
+        <!-- 活動標題 -->
         <h1>「辦」識AI 系列 - 從零開始：手把手帶你打造專屬 AI Chatbot</h1>
         
-        <p>喝杯咖啡，慢下來感受科技。有任何關於活動的查詢或想法，歡迎隨時點擊右下角，與小幫手溫柔對話。</p>
-        
-        <div class="status-badge" id="status">正在連結心靈與 AI...</div>
+        <!-- 簡介內容 -->
+        <p class="description">
+            喝杯咖啡，慢下來感受科技。有任何關於活動的查詢或想法，歡迎隨時點擊右下角，與小幫手溫柔對話。
+        </p>
+
+        <!-- 狀態提示語句 -->
+        <div class="status-text" id="status-text">
+            ✨ 準備就緒，右下角隨時傾偈
+        </div>
+
+        <!-- 🎥 自動播放影片（請記得替換 src 裡面的影片網址） -->
+        <div class="video-container">
+            <video autoplay muted loop playsinline poster="https://via.placeholder.com/600x337?text=Loading+Video">
+                <!-- 💡 請將下方的 demo 影片連結換成你的影片檔案路徑 (例如 ./video.mp4 或網址) -->
+                <source src="https://github.com/Catherine-315/Coze---testing/raw/refs/heads/main/%E5%A4%9A%E5%90%88%E4%B8%80%20AI%20%E5%9C%98%E9%9A%8A.mp4" type="video/mp4">
+                您的瀏覽器不支援 HTML5 影片播放。
+            </video>
+        </div>
     </div>
 
+    <!-- 🤖 Coze Chatbot SDK 腳本 -->
+    <script src="https://sf-cdn.coze.com/obj/unedited-static/bot_studio/sdk/7.0.0/coze_web_sdk.js"></script>
     <script>
-      async function initChat() {
-        const statusEl = document.getElementById('status');
-        try {
-          const res = await fetch('/api/token');
-          const data = await res.json();
-          
-          if (!data.access_token) {
-            statusEl.innerText = "連線未如預期，請重新整理";
-            return;
-          }
-
-          statusEl.innerText = "✨ 準備就緒，右下角隨時傾偈";
-
-          new CozeWebSDK.WebChatClient({
+        // 初始化 Coze Web SDK
+        new CozeWebSDK.WebChatClient({
             config: {
-              bot_id: '7662199682715090949',
-              isIframe: false
+                bot_id: '7662199682715090949', // 請填入你的 Bot ID
             },
             componentProps: {
-              title: '官方智能導覽員',
+                title: '官方智能導覽員',
             },
-            auth: {
-              type: 'token',
-              token: data.access_token,
-              onRefreshToken: async () => {
-                const refreshRes = await fetch('/api/token');
-                const refreshData = await refreshRes.json();
-                return refreshData.access_token;
-              }
-            },
-            userInfo: {
-              id: data.user_id,
-              nickName: "Catherine",
-            }
-          });
-        } catch (err) {
-          console.error("初始化聊天室失敗：", err);
-          statusEl.innerText = "出了一點小狀況";
-        }
-      }
-
-      initChat();
+        });
     </script>
 </body>
 </html>
